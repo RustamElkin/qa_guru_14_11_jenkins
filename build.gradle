@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'io.qameta.allure' version '2.10.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+def allureVersion = "2.19.0",
+    slf4jVersion = "1.7.32",
+    selenideVersion = "6.7.2",
+    aspectjWeaverVersion = "1.9.9.1",
+    junitVersion = "5.9.0"
+
+allure {
+    report {
+        version.set(allureVersion)
+    }
+    adapter {
+        aspectjWeaver = true
+        frameworks {
+            junit5 { //название фреймворка
+                adapterVersion.set(allureVersion) //версия интеграции фреймворка и Allure
+            }
+        }
+    }
+}
+
+dependencies {
+    testImplementation(
+            "io.qameta.allure:allure-selenide:$allureVersion",
+            "org.slf4j:slf4j-simple:$slf4jVersion",
+            "com.codeborne:selenide:$selenideVersion",
+            "org.aspectj:aspectjweaver:$aspectjWeaverVersion",
+            "org.junit.jupiter:junit-jupiter:$junitVersion"
+    )
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+
+    testLogging {
+        lifecycle {
+            events "started", "skipped", "failed", "standard_error", "standard_out"
+            exceptionFormat "short"
+        }
+    }
+}
+
+test {}
+
+//test {
+//    useJUnitPlatform()
+//    systemProperties(System.getProperties())
+//}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
