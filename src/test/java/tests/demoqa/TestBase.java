@@ -39,7 +39,7 @@ public class TestBase {
         if (Configuration.browser.equals("chrome")) {
             Attach.browserConsoleLogs();
         }
-        if (System.getProperty("selenide_remote") != null) {
+        if (System.getProperty("selenide.remote") != null) {
             Attach.addVideo();
         }
     }
